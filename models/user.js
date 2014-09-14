@@ -1,8 +1,7 @@
 "use strict";
 
-var redis = require('redis');
 var bcrypt = require('bcrypt');
-var db = redis.createClient();
+var db = require('../lib/db');
 
 module.exports = User
 

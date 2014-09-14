@@ -1,8 +1,6 @@
 "use strict";
 
-var redis = require('redis');
-var db = redis.createClient();
-
+var db = require('../lib/db');
 var uuid = require('node-uuid');
 
 module.exports = Pasta;

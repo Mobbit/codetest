@@ -27,4 +27,21 @@ describe('User', function() {
       });
     });
   });
+
+  describe('#hashPassword', function() {
+    var user = new User({name: 'mario', pass: 'luigi'});
+
+    it('uses bcrypt to hash the password', function(done) {
+      user.hashPassword(function() {
+        expect(user.pass).not.to.equal('luigi');
+        done();
+      });
+    });
+    it('uses adds a salt to the user', function(done) {
+      user.hashPassword(function() {
+        expect(user.salt).not.to.be;
+        done();
+      });
+    });
+  });
 });
