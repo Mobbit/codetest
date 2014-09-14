@@ -6,3 +6,11 @@ body {
 a {
   color: #00B7FF;
 }
+
+form.delete {
+  display: inline;
+}
+
+a.edit {
+  margin-right: 10px;
+}

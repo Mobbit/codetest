@@ -1,0 +1,16 @@
+div#menu
+      if locals.user
+        ul.nav.nav-pills
+          li
+            a(href='/users/logout') Logout
+          li
+            a(href='/pastas/new') +
+        span
+          = 'You are: '
+          = user.name
+      else
+        ul.nav.nav-pills
+          li
+            a(href='/users/login') Login
+          li
+            a(href='/users/register') Register

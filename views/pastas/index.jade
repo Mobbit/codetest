@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+  h1= title
+
+  ul
+    each pasta in pastas
+      li
+        a(href='/pastas/' + pasta)= pasta

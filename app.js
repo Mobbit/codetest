@@ -4,14 +4,19 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var methodOverride = require('method-override')
-var session = require('express-session')
+var methodOverride = require('method-override');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
+
+var redis = require('redis');
+var client = redis.createClient();
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var pastas = require('./routes/pastas');
 
-var messages = require('./lib/messages')
+var messages = require('./lib/messages');
+var user = require('./middlewares/user');
 
 var app = express();
 
@@ -24,12 +29,18 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(methodOverride());
+app.use(methodOverride('_method'));
 app.use(cookieParser('McAffee secured NSA protection'));
-app.use(session({ secret: 'McAffee secured NSA protection' }));
-app.use(messages);
+app.use(session({
+  secret: 'McAffee secured NSA protection',
+  store: new RedisStore({"client": client})
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
+
+app.use(user);
+app.use(messages);
 
 app.use('/', routes);
 app.use('/users', users);
