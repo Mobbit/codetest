@@ -38,6 +38,7 @@ var savePasta = function(pasta, res, error_redirect) {
 };
 
 router.get('/', require_auth, function(req, res, next) {
+  console.log("USER" + res.locals.user);
   Pasta.getByUser(res.locals.user, function(err, pastas) {
     if (err) {
       return next(err);
@@ -80,7 +81,7 @@ router.post('/', require_auth, function(req, res, next) {
 
 router.get('/:id', function(req, res) {
   Pasta.get(req.params.id, function(err, pasta) {
-    if(pasta.id) {
+    if(pasta && pasta.id) {
       if(pasta.private !== 'true' || res.locals.user && pasta.user_id == res.locals.user.id) {
         res.format({
           json: function(){

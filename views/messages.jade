@@ -1,5 +1,9 @@
 if locals.messages
   each message in messages
-    p(class=message.type)
+    if message.type == 'error'
+      - klass = "alert alert-danger"
+    else
+      - klass = "alert alert-info"
+    div(class=klass)
       =message.string
   - removeMessages()

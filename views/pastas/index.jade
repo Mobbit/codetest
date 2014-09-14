@@ -7,7 +7,7 @@ block content
   if pastas.length === 0
     h2 No pasta here, create and share!
 
-  ul
+  ul.list-group
     each pasta in pastas
-      li
+      li.list-group-item
         a(href='/pastas/' + pasta.id)= pasta.title

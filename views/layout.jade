@@ -3,22 +3,23 @@ html
   head
     title= title
 
-  link(rel='stylesheet', href='/bootstrap-css/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/bootstrap-css/css/bootstrap.min.css')
 
-  link(rel='stylesheet', href='/bootstrap-css/css/bootstrap-theme.min.css')
+    link(rel='stylesheet', href='/bootstrap-css/css/bootstrap-theme.min.css')
 
-  script(src='/jquery/jquery.min.js')
+    script(src='/jquery/jquery.min.js')
 
-  script(src='/bootstrap-css/js/bootstrap.min.js')
+    script(src='/bootstrap-css/js/bootstrap.min.js')
 
-  link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
 
-  link(rel='stylesheet', href='/highlightjs/styles/default.css')
-  script(src="/highlightjs/highlight.pack.js")
-  script
-    = "hljs.initHighlightingOnLoad();"
+    link(rel='stylesheet', href='/highlightjs/styles/default.css')
+    script(src="/highlightjs/highlight.pack.js")
+    script
+      = "hljs.initHighlightingOnLoad();"
 
   body
+    div.logo CodePasta
     include menu.jade
 
     block content

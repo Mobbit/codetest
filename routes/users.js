@@ -2,13 +2,13 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 
-var respond = function(data) {
+var respond = function(data, res) {
   res.format({
     json: function(){
       if (data.error) {
         res.send({ error: error });
       } else if (data.message) {
-        res.send({ message: message });
+        res.send({ message: data.message });
       }
     },
 
@@ -16,7 +16,7 @@ var respond = function(data) {
       if (data.error) {
         res.error(error);
       } else if (data.message) {
-        res.message(message);
+        res.message(data.message);
       }
       
       res.redirect(data.redirect);
@@ -32,14 +32,14 @@ router.post('/', function(req, res) {
   var data = req.body.user;
 
   if (!data || !data.name || !data.pass) {
-    respond({error: 'Username and password are required', redirect: 'back'});
+    respond({error: 'Username and password are required', redirect: 'back'}, res);
   }
 
   User.getByName(data.name, function(err, user){
     if (err) return next(err);
     var error, message, redirect;
     if (user.id) {
-      respond({error: 'Username already taken!', redirect: 'back'});
+      respond({error: 'Username already taken!', redirect: 'back'}, res);
     } else {
       user = new User({
         name: data.name,
@@ -49,8 +49,7 @@ router.post('/', function(req, res) {
       user.save(function(err){
         if (err) return next(err);
         req.session.uid = user.id;
-        res.redirect('/pastas');
-        respond({message: 'You have successfuly registered.', redirect: '/pastas'});
+        respond({message: 'You have successfuly registered.', redirect: '/pastas'}, res);
       });
     }
 

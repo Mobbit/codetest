@@ -1,15 +1,15 @@
 div#menu
-      if locals.user
-        ul.nav.nav-pills
-          li
-            a.btn(href='/users/logout')= 'Logout ' + user.name
-          li
-            a.btn(href='/pastas/new') Create Pasta
-          li
-            a.btn(href='/pastas') My Pastas
-      else
-        ul.nav.nav-pills
-          li
-            a(href='/users/login') Login
-          li
-            a(href='/users/register') Register
+  if locals.user
+    ul.nav.nav-pills
+      li
+        a.btn.btn-danger(href='/users/logout')= 'Logout ' + user.name
+      li
+        a.btn.btn-primary(href='/pastas/new') Create Pasta
+      li
+        a.btn.btn-default(href='/pastas') My Pastas
+  else
+    ul.nav.nav-pills
+      li
+        a.btn.btn-default(href='/users/login') Login
+      li
+        a.btn.btn-default(href='/users/register') Register

@@ -48,7 +48,11 @@ Pasta.prototype.is_valid = function() {
 Pasta.get = function(id, fn) {
   db.hgetall('pasta:' + id, function(err, pasta) {
     if (err) return fn(err);
-    fn(null, new Pasta(pasta));
+    if(pasta !== null) {
+      fn(null, new Pasta(pasta));
+    } else {
+      fn(null, null);
+    }
   });
 };
 
@@ -57,18 +61,19 @@ Pasta.getByUser = function(user, fn) {
     if (err) return fn(err);
 
     var pastas = [];
+    if(members) {
+      members.forEach(function(member) {
+        Pasta.get(member, function(err, pasta) {
+          if (err) return fn(err);
 
-    members.forEach(function(member) {
-      Pasta.get(member, function(err, pasta) {
-        if (err) return fn(err);
-
-        if(members.length === pastas.push(pasta)) {
-          fn(null, pastas);
-        }
+          if(members.length === pastas.push(pasta)) {
+            fn(null, pastas);
+          }
+        });
       });
-    });
+    }
 
-    if (members.length === 0) {
+    if (members === null || members.length === 0) {
       fn(null, pastas);
     };
   });

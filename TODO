@@ -1,7 +1,5 @@
 TODO
 
-- validation
-- specs
 - JSON responses should contain Links for API navigation
 - TOKEN / BasicAuth for API
 - better api responses
