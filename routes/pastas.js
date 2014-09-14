@@ -3,7 +3,9 @@ var router = express.Router();
 var Pasta = require('../models/pasta');
 var User = require('../models/user');
 
-router.get('/', function(req, res, next) {
+var require_auth = require('../middlewares/require_auth');
+
+router.get('/', require_auth, function(req, res, next) {
   Pasta.getByUser(res.locals.user, function(err, pastas) {
     if (err) {
       return next(err);
@@ -14,11 +16,11 @@ router.get('/', function(req, res, next) {
   
 });
 
-router.get('/new', function(req, res) {
+router.get('/new', require_auth, function(req, res) {
   res.render('pastas/edit', { title: 'Create Pasta', pasta: {}, action:'/pastas'});
 });
 
-router.post('/', function(req, res, next) {
+router.post('/', require_auth, function(req, res, next) {
   var data = req.body.pasta;
 
   var pasta = new Pasta({
@@ -50,37 +52,47 @@ router.get('/:id', function(req, res) {
   });
 });
 
-router.put('/:id', function(req, res) {
-  var data = req.body.pasta;
-
-  var pasta = new Pasta({
-    id: req.params.id,
-    user_id: res.locals.user.id,
-    title: data.title,
-    code: data.code,
-    private: data.private === "true"
-  });
-
-  pasta.save(function(err) {
-    if (err) {
-      console.log(err);
-      return next(err);
-    }
-    res.redirect('/pastas/' + pasta.id);
-  });
-});
-
-router.get('/:id/edit', function(req, res) {
+router.put('/:id', require_auth, function(req, res) {
   Pasta.get(req.params.id, function(err, pasta) {
-    res.render('pastas/edit', { 
-      title: 'Edit: ' + pasta.title,
-      pasta: pasta,
-      action:'/pastas/' + req.params.id + '?_method=PUT'
-    }); 
+    if(pasta.user_id && pasta.user_id == res.locals.user.id) {
+      var data = req.body.pasta;
+      
+      var pasta = new Pasta({
+        id: req.params.id,
+        user_id: res.locals.user.id,
+        title: data.title,
+        code: data.code,
+        private: data.private === "true"
+      });
+
+      pasta.save(function(err) {
+        if (err) {
+          return next(err);
+        }
+        res.redirect('/pastas/' + pasta.id);
+      });
+    } else {
+      res.send(401);
+    }
+  });
+  
+});
+
+router.get('/:id/edit', require_auth, function(req, res) {
+  Pasta.get(req.params.id, function(err, pasta) {
+    if(pasta.user_id == res.locals.user.id) {
+      res.render('pastas/edit', { 
+        title: 'Edit: ' + pasta.title,
+        pasta: pasta,
+        action:'/pastas/' + req.params.id + '?_method=PUT'
+      }); 
+    } else {
+      res.send(401);
+    }
   });
 });
 
-router.delete('/:id', function(req, res) {
+router.delete('/:id', require_auth, function(req, res) {
   Pasta.get(req.params.id, function(err, pasta) {
     if(err) return next(err);
 

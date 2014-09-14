@@ -1,7 +1,6 @@
 var User = require('../models/user');
 
 module.exports = function(req, res, next) {
-  console.log(req.session);
   var uid = req.session.uid;
   if (!uid) return next();
   User.get(uid, function(err, user) {
