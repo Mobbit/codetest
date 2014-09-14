@@ -4,6 +4,9 @@ block content
   h1= title
   include ../messages.jade
 
+  if pastas.length === 0
+    h2 No pasta here, create and share!
+
   ul
     each pasta in pastas
       li

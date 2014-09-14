@@ -10,12 +10,11 @@ block content
         input.form-control(name='pasta[title]', value=pasta.title)
     div.form-group
       label Code
-        textarea.form-control(name='pasta[code]')
+        textarea.code-input.form-control(name='pasta[code]')
           = pasta.code
     div.form-group
-      label Private
-        select(name='pasta[private]')
-          option(selected=pasta.private === 'true', value='true') True
-          option(selected=pasta.private !== 'true', value='false') False
+      select(name='pasta[private]')
+        option(selected=pasta.private === 'true', value='true') Private
+        option(selected=pasta.private !== 'true', value='false') Public
           
     button.btn.btn-primary(type='submit') Save

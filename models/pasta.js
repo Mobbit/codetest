@@ -42,6 +42,11 @@ Pasta.prototype.delete = function(fn) {
   });
 };
 
+Pasta.prototype.is_valid = function() {
+  return this.title != undefined && this.title.length > 0 && 
+         this.code != undefined && this.code.length > 0;
+};
+
 Pasta.get = function(id, fn) {
   db.hgetall('pasta:' + id, function(err, pasta) {
     if (err) return fn(err);
@@ -64,5 +69,9 @@ Pasta.getByUser = function(user, fn) {
         }
       });
     });
+
+    if (members.length === 0) {
+      fn(null, pastas);
+    };
   });
 };

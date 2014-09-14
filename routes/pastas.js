@@ -4,6 +4,38 @@ var Pasta = require('../models/pasta');
 var User = require('../models/user');
 
 var require_auth = require('../middlewares/require_auth');
+var querystring = require('querystring');
+
+var savePasta = function(pasta, res, error_redirect) {
+  if(pasta.is_valid() === true) {
+    pasta.save(function(err) {
+      if (err) {
+        return next(err);
+      }
+      res.format({
+        json: function(){
+          res.send(pasta);
+        },
+
+        html: function(){
+          res.redirect('/pastas/' + pasta.id);
+        }
+      });
+    });
+  } else {
+    var error = 'A pasta needs a title and code';
+    res.format({
+      json: function(){
+        res.send({error: error});
+      },
+
+      html: function(){
+        res.error(error);
+        res.redirect(error_redirect);
+      }
+    });
+  }
+};
 
 router.get('/', require_auth, function(req, res, next) {
   Pasta.getByUser(res.locals.user, function(err, pastas) {
@@ -24,7 +56,13 @@ router.get('/', require_auth, function(req, res, next) {
 });
 
 router.get('/new', require_auth, function(req, res) {
-  res.render('pastas/edit', { title: 'Create Pasta', pasta: {}, action:'/pastas'});
+  pasta = new Pasta({
+    "user_id": res.locals.user.id,
+    "title": req.query.title,
+    "code": req.query.code,
+    "private": req.query.private === 'true'
+  });
+  res.render('pastas/edit', { title: 'Create Pasta', pasta: pasta, action:'/pastas'});
 });
 
 router.post('/', require_auth, function(req, res, next) {
@@ -37,20 +75,7 @@ router.post('/', require_auth, function(req, res, next) {
     "private": data.private === "true"
   });
 
-  pasta.save(function(err) {
-    if (err) {
-      return next(err);
-    }
-    res.format({
-      json: function(){
-        res.send(pasta);
-      },
-
-      html: function(){
-        res.redirect('/pastas/' + pasta.id);
-      }
-    });
-  });
+  return savePasta(pasta, res, '/pastas/new?' + querystring.stringify(data));
 });
 
 router.get('/:id', function(req, res) {
@@ -88,20 +113,7 @@ router.put('/:id', require_auth, function(req, res) {
         private: data.private === "true"
       });
 
-      pasta.save(function(err) {
-        if (err) {
-          return next(err);
-        }
-        res.format({
-          json: function(){
-            res.send(pasta);
-          },
-
-          html: function(){
-            res.redirect('/pastas/' + pasta.id);
-          }
-        });
-      });
+      savePasta(pasta, res, '/pastas/' + pasta.id + '/edit');
     } else {
       res.send(401);
     }
@@ -159,7 +171,7 @@ router.delete('/:id', require_auth, function(req, res) {
           res.message(message);
         }
 
-        res.redirect(redirect);
+        return res.redirect(redirect);
       }
     });
   });

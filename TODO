@@ -2,7 +2,7 @@ TODO
 
 - validation
 - specs
-- json/api
 - JSON responses should contain Links for API navigation
 - TOKEN / BasicAuth for API
 - better api responses
+- make the layout responsive

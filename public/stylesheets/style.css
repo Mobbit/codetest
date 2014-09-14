@@ -14,3 +14,8 @@ form.delete {
 a.edit {
   margin-right: 10px;
 }
+
+textarea.code-input {
+  width: 400px;
+  height: 300px;
+}

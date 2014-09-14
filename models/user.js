@@ -12,6 +12,11 @@ function User(obj) {
   }
 }
 
+User.prototype.is_valid = function() {
+  return this.name != undefined && this.name.length > 0 &&
+         this.pass != undefined && this.pass.length > 0;
+};
+
 User.prototype.save = function(fn) {
   if (this.id) {
     this.update(fn);

@@ -28,3 +28,6 @@ to delete unwanted content
 
 As an developer I want to access the data via a restful api
 to be able to develop third party apps
+
+As a user I want a responsive layout
+So I can make pasta on any device

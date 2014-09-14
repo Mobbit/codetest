@@ -49,7 +49,7 @@ router.post('/', function(req, res) {
       user.save(function(err){
         if (err) return next(err);
         req.session.uid = user.id;
-        res.redirect('/login');
+        res.redirect('/pastas');
         respond({message: 'You have successfuly registered.', redirect: '/pastas'});
       });
     }
