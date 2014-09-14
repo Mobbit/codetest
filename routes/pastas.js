@@ -10,8 +10,15 @@ router.get('/', require_auth, function(req, res, next) {
     if (err) {
       return next(err);
     }
+    res.format({
+      json: function(){
+        res.send(pastas);
+      },
 
-    res.render('pastas/index', { title: 'Your Pastas', pastas: pastas });
+      html: function(){
+        res.render('pastas/index', { title: 'Your Pastas', pastas: pastas });
+      }
+    });
   });
   
 });
@@ -34,7 +41,15 @@ router.post('/', require_auth, function(req, res, next) {
     if (err) {
       return next(err);
     }
-    res.redirect('/pastas/' + pasta.id);
+    res.format({
+      json: function(){
+        res.send(pasta);
+      },
+
+      html: function(){
+        res.redirect('/pastas/' + pasta.id);
+      }
+    });
   });
 });
 
@@ -42,7 +57,15 @@ router.get('/:id', function(req, res) {
   Pasta.get(req.params.id, function(err, pasta) {
     if(pasta.id) {
       if(pasta.private !== 'true' || res.locals.user && pasta.user_id == res.locals.user.id) {
-        res.render('pastas/show', { title: pasta.title, pasta: pasta });
+        res.format({
+          json: function(){
+            res.send(pasta);
+          },
+
+          html: function(){
+            res.render('pastas/show', { title: pasta.title, pasta: pasta });
+          }
+        });
       } else {
         res.send(401);
       }
@@ -69,7 +92,15 @@ router.put('/:id', require_auth, function(req, res) {
         if (err) {
           return next(err);
         }
-        res.redirect('/pastas/' + pasta.id);
+        res.format({
+          json: function(){
+            res.send(pasta);
+          },
+
+          html: function(){
+            res.redirect('/pastas/' + pasta.id);
+          }
+        });
       });
     } else {
       res.send(401);
@@ -85,7 +116,7 @@ router.get('/:id/edit', require_auth, function(req, res) {
         title: 'Edit: ' + pasta.title,
         pasta: pasta,
         action:'/pastas/' + req.params.id + '?_method=PUT'
-      }); 
+      });
     } else {
       res.send(401);
     }
@@ -96,20 +127,41 @@ router.delete('/:id', require_auth, function(req, res) {
   Pasta.get(req.params.id, function(err, pasta) {
     if(err) return next(err);
 
+    var redirect, error, message;
+    redirect = '/pastas';
+
     if(pasta.user_id == res.locals.user.id) {
       pasta.delete(function(err) {
         if(err) {
-          res.error('Pasta ' + req.params.id + ' could not be deleted.');
-          res.redirect('/pastas/' + req.params.id);
+          error = 'Pasta ' + req.params.id + ' could not be deleted.';
+          redirect = '/pastas/' + req.params.id;
         } else {
-          res.message('Pasta ' + req.params.id + ' has been deleted.');
-          res.redirect('/pastas');
+          message = 'Pasta ' + req.params.id + ' has been deleted.';
         }
       });
     } else {
-      res.error('You have no right to delete ' + req.params.user_id);
-      res.redirect('/pastas');
+      error = 'You have no right to delete ' + req.params.user_id;
     }
+    res.format({
+      json: function(){
+        if(error) {
+          res.send({error: error})
+        } else {
+          res.send(pasta);
+        }
+      },
+
+      html: function(){
+        if(error) {
+          res.error(error);
+        }
+        if (message){
+          res.message(message);
+        }
+
+        res.redirect(redirect);
+      }
+    });
   });
 });
 

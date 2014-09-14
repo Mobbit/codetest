@@ -2,12 +2,11 @@ div#menu
       if locals.user
         ul.nav.nav-pills
           li
-            a(href='/users/logout') Logout
+            a.btn(href='/users/logout')= 'Logout ' + user.name
           li
-            a(href='/pastas/new') +
-        span
-          = 'You are: '
-          = user.name
+            a.btn(href='/pastas/new') Create Pasta
+          li
+            a.btn(href='/pastas') My Pastas
       else
         ul.nav.nav-pills
           li
