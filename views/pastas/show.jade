@@ -1,20 +1,15 @@
 extends ../layout
 
 block content
-  if !pasta.private || locals.user && user.id == pasta.user_id
-    h1= title
-    p
-      strong= pasta.private === 'true' ? 'Private' : 'Public'
+  h1= title
+  p
+    strong= pasta.private === 'true' ? 'Private' : 'Public'
 
-    pre
-      code= pasta.code
+  pre
+    code= pasta.code
 
-    if (locals.user && user.id == pasta.user_id)
-      div.btn-group
-        a.edit(href='/pastas/' + pasta.id + '/edit') Edit
-        form.delete(method='POST', action='/pastas/' + pasta.id + '?_method=DELETE')
-          button.btn.btn-danger(type='submit') Delete
-
-
-  else
-    div.alert.alert-danger(role="alert") This Pasta is private
+  if (locals.user && user.id == pasta.user_id)
+    div.btn-group
+      a.edit(href='/pastas/' + pasta.id + '/edit') Edit
+      form.delete(method='POST', action='/pastas/' + pasta.id + '?_method=DELETE')
+        button.btn.btn-danger(type='submit') Delete

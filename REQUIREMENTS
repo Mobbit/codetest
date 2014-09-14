@@ -1,0 +1,30 @@
+As a user I want to create a Pasta
+To share it with other people
+
+As a user I want to make a private Pasta
+To share it just with myself
+
+As a user I want to edit a Pasta
+to update Code or make it Private
+
+As a user I want to see a list of my Pasta
+To have an overview
+
+As a user I want to delete Pasta
+To stop sharing embarrising code with others
+
+As an owner I want to show ads to users
+to earn money with my product
+
+As a user I want to be a premium user
+so that I don't have to user Adblock Plus anymore
+and for some premium features
+
+As an admin I can see all Pasta
+To be able to check them for unwanted content
+
+As an admin I can delete all Pasta
+to delete unwanted content
+
+As an developer I want to access the data via a restful api
+to be able to develop third party apps

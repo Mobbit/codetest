@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Pasta = require('../models/pasta');
+var User = require('../models/user');
 
 router.get('/', function(req, res, next) {
   Pasta.getByUser(res.locals.user, function(err, pastas) {

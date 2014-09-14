@@ -42,7 +42,6 @@ Pasta.prototype.delete = function(fn) {
   });
 };
 
-
 Pasta.get = function(id, fn) {
   db.hgetall('pasta:' + id, function(err, pasta) {
     if (err) return fn(err);
@@ -53,6 +52,17 @@ Pasta.get = function(id, fn) {
 Pasta.getByUser = function(user, fn) {
   db.smembers(user.id + ':pastas', function(err, members) {
     if (err) return fn(err);
-    fn(err, members);
+
+    var pastas = [];
+
+    members.forEach(function(member) {
+      Pasta.get(member, function(err, pasta) {
+        if (err) return fn(err);
+
+        if(members.length === pastas.push(pasta)) {
+          fn(null, pastas);
+        }
+      });
+    });
   });
 };
