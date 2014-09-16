@@ -1,0 +1,4 @@
+curl --cookie-jar cookies.txt --data "user[name]=mo&user[pass]=pass" http://localhost:3000/users/login
+curl --cookie cookies.txt http://localhost:3000/pastas
+curl --cookie cookies.txt --data "pasta[title]=APIPASTA&pasta[code]=somecode&pasta[private]=true" http://localhost:3000/pastas
+curl --cookie cookies.txt http://localhost:3000/pastas/c3af802d-2a9f-485b-a3ce-0c747828a8ff
